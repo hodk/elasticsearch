@@ -31,6 +31,15 @@ import org.gradle.util.GradleVersion
 
 import static org.elasticsearch.gradle.tool.Boilerplate.maybeConfigure
 
+buildscript {
+    repositories {
+        mavenCentral()
+        dependencies {
+            classpath 'io.sealights.on-premise.agents.plugin:sealights-gradle-plugin:latest.release'
+        }
+    }
+}
+
 plugins {
   id 'lifecycle-base'
   id 'elasticsearch.global-build-info'
@@ -44,6 +53,31 @@ apply from: 'gradle/runtime-jdk-provision.gradle'
 
 // common maven publishing configuration
 allprojects {
+  apply plugin: 'io.sealights.on-premise.agents.plugin.sealights-gradle-plugin'
+        sealights {
+            token = System.getenv('SL_TOKEN')
+//          tokenFile="sltoken.txt"
+            createBuildSessionId = true
+            buildSessionIdFile = "buildSessionId.txt"
+//          buildSessionId = System.getenv('SL_BUILD_SESSION_ID')
+         
+            filesStorage="/tmp"
+            includeResources=true
+ 
+            logEnabled = false
+            logLevel = "off"
+            logToFile = false
+            logToConsole = true
+ 
+//          runTestOnly=true
+//          testTasksAndStages=["test":"Unit Tests", "junitPlatformTest":"Unit Tests", "integrationTest":"Integration Tests"]
+//          filesIncluded="*sample*"
+//          filesExcluded="*sample*"
+//          proxy = "http://localhost:8888"
+//          sealightsJvmParams=["sl.param1":"true","sl.param2":"value"]
+//          buildScannerParams=["sl.param1":"true","sl.param2":"value"]
+//          testListenerJvmParams=["sl.param1":"true","sl.param2":"value"]
+        }
   group = 'org.elasticsearch'
   version = VersionProperties.elasticsearch
   description = "Elasticsearch subproject ${project.path}"
